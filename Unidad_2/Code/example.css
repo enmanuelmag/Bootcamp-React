@@ -1,0 +1,96 @@
+/* Por tipo */
+h1 {
+  color: red;
+}
+
+/* Por clase */
+.nombre-de-clase {
+  color: blue;
+}
+
+/* Por id */
+#nombre-de-id {
+  color: green;
+}
+
+/* Por atributo */
+[type='text'] {
+  color: yellow;
+}
+
+[href='http://www.google.com']
+{
+  color: yellow;
+}
+
+[href^='http://']
+{
+  color: yellow;
+}
+
+/* Por pseudo-clase */
+a:hover {
+  color: pink;
+}
+
+/* Por pseudo-elemento */
+p::first-line {
+  color: orange;
+}
+
+li:nth-child(odd) {
+  color: purple;
+}
+
+/* Pseudoclases */
+:active,
+:disabled,
+:enabled,
+:first,
+:first-child,
+:focus,
+:nth-child(),
+:visited {
+  color: red;
+}
+
+/* Pseudo elementos */
+::after,
+::before,
+::first-letter,
+::first-line,
+::selection {
+  color: red;
+}
+
+/* Combinaciones */
+
+/* Por tipo y clase */
+h2.nombre-de-clase {
+  color: red;
+}
+
+/* Por tipo y id */
+h3#nombre-de-id {
+  color: red;
+}
+
+/* Por clase y atributo */
+.nombre-de-clase[type='text'] {
+  color: red;
+}
+
+/* Por clase y pseudo-clase */
+.nombre-de-clase:hover {
+  color: red;
+}
+
+/* Por jerarquía */
+h1 a {
+  color: red;
+}
+
+/* Por jerarquía directa */
+h1 > a.link-externo {
+  color: red;
+}
