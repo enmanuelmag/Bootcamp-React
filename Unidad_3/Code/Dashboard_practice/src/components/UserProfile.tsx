@@ -1,12 +1,15 @@
+import { UserType } from '@customTypes/user';
+import moment from 'moment';
+
 type UserProfileProps = {
-  name: string;
-  url: string;
-  verified?: boolean;
+  data: UserType;
   children?: React.ReactNode;
 };
 
 const UserProfile = (props: UserProfileProps) => {
-  const { name, url, verified, children } = props;
+  const { data, children } = props;
+
+  const { name, url, verified, birthday, role } = data;
 
   return (
     <article className="cd-basis-full sm:cd-basis-1/3 md:cd-basis-1/3 lg:cd-basis-1/3 cd-p-[0.5rem]">
@@ -23,6 +26,14 @@ const UserProfile = (props: UserProfileProps) => {
             }`}
           >
             {verified ? 'Verified' : 'Not verified'} user
+          </p>
+          <p className="cd-text-sm">
+            Role: <strong>{role}</strong>
+          </p>
+
+          <p className="cd-text-sm">
+            Birthday:{' '}
+            <strong>{moment.unix(birthday).format('DD/MM/YYYY')}</strong>
           </p>
         </div>
 
@@ -43,7 +54,11 @@ const UserProfile = (props: UserProfileProps) => {
   }
 
   async function copyData() {
-    const data = `${name} - ${verified ? 'Verified' : 'Not verified'}`;
+    const data = `${name} - ${
+      verified ? 'Verified' : 'Not verified'
+    } user - Role: ${role} - Birthday: ${moment
+      .unix(birthday)
+      .format('DD/MM/YYYY')}`;
 
     try {
       await window.navigator.clipboard.writeText(data);
