@@ -37,6 +37,7 @@ Para esta práctica crearemos un nuevo endpoint `users/form/:id?` que nos permit
 - Age, un input de número.
 - City, un input de texto.
 - Verified, un checkbox.
+- Role, un select con las opciones “admin” y “user”.
 - Birthday, un input de fecha.
 
 Se deben cumplir los siguientes requerimientos al usar los hooks:
@@ -54,6 +55,7 @@ npm install zod
       - Input
       - Number
       - Verified
+      - Select
       - Date
 3. Crear la nueva vista/componente `form.tsx` en la carpeta `src/pages/users` que contenga el formulario y cumpla con los requerimientos. Dejar la lógica del guardado para el final.
 
@@ -83,6 +85,8 @@ src/
       Input.tsx
       Number.tsx
       Verified.tsx
+      Select.tsx
+      Date.tsx
   pages/
     users/
       ...
@@ -100,7 +104,7 @@ Los pasos a seguir son los siguientes:
 abstract class DataDS {
   abstract loadUsers(state?: string): Promise<UserLoaderData>;
 
-  abstract loadUserByIndex(index: number): Promise<UserByIndexLoaderData>;
+  abstract loadUserById(id: string): Promise<UserByIdLoaderData>;
 
   abstract saveUser(user: UserCreate): Promise<void>;
 }
@@ -132,13 +136,19 @@ class LocalStorageDS implements DataDS {
       throw new Error('Error loading users');
     }
   }
-  async loadUserByIndex(index: number) {
+  async loadUserByIs(id: string) {
     try {
       await sleep();
 
       const usersRaw = localStorage.getItem(USERS_KEY) ?? '[]';
 
       const users = JSON.parse(usersRaw) as User[];
+
+      const index = users.findIndex((user) => user.id === id);
+
+      if (index === -1) {
+        throw new Error('User not found');
+      }
 
       return {
         user: users[index],
@@ -158,6 +168,7 @@ class LocalStorageDS implements DataDS {
 
       users.push({
         ...user,
+        id: uuidv4(),
         url: `https://avatar.iran.liara.run/public/${users.length + 1}`,
       });
 
@@ -168,13 +179,19 @@ class LocalStorageDS implements DataDS {
     }
   }
 
-  async updateUser(index: number, user: UserCreateType) {
+  async updateUser(id: string, user: UserCreateType) {
     try {
       await sleep();
 
       const users = this.getUsers();
 
       const newUsers: UserType[] = users;
+
+      const index = newUsers.findIndex((user) => user.id === id);
+
+      if (index === -1) {
+        throw new Error('User not found');
+      }
 
       const userToUpdate = newUsers[index];
 
@@ -202,7 +219,7 @@ class DataRepoImpl {
     return await this.data.loadUsers(state);
   }
 
-  async loadUserByIndex(index: number): Promise<UserByIndexLoaderData> {
+  async loadUserById(id: string): Promise<UserByIdLoaderData> {
     return await this.data.loadUserByIndex(index);
   }
 
@@ -210,8 +227,8 @@ class DataRepoImpl {
     return await this.data.saveUser(user);
   }
 
-  async updateUser(index: number, user: UserCreateType): Promise<void> {
-    return this.data.updateUser(index, user);
+  async updateUser(id: string, user: UserCreateType): Promise<void> {
+    return this.data.updateUser(id, user);
   }
 }
 

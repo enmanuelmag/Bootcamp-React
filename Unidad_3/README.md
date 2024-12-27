@@ -62,11 +62,12 @@ Pasos a seguir:
      - name: string
      - url: string
      - verified: boolean?
+     - role: string (admin, user)
      - birthday: number (usar la librería moment para el manejo de fechas desde un number "unix" a un string)
 6. Crear la carpeta `api` en `src/` y dentro de ella el archivo `users.ts`. En este archivo crearemos una función que nos devuelva una lista de usuarios.
-     - Los usuarios deben estar en un Array (definir mínimo 3) 
+     - Los usuarios deben estar en un Array (definir mínimo 3) y hacer uso de la librería [uuid](https://www.npmjs.com/package/uuid) para crear el id de cada usuario.
      - Crear una función `sleep` que nos permita simular una carga de datos.
-     - Crear la función `loadUsers` que nos devuelva una promesa con los usuarios. Usar `sleep` para simular la carga y `defer` para resolver la promesa.
+     - Crear la función `loadUsers` que nos devuelva una promesa con los usuarios. Usar `sleep` para simular la carga.
      - Definir el tipo `UserLoaderData` de retorno de la función.
      - Usar momentjs y uuid para mejor manejo de datos.
 7. Crear la carpeta `users` dentro de `pages` y dentro de ella el archivo `index.tsx`. En este archivo:
@@ -74,7 +75,7 @@ Pasos a seguir:
       - Importar el hook `useLoaderData` de `react-router-dom` y guardarlo en una constante `data`.
       - Importar el componente `Await` de `react-router-dom` para manejar la promesa.
       - Hacer uso de React.Suspense para mostrar un loader mientras se carga la data.
-      - Dentro de `Await` renderizar la lista de usuarios con el componente `UserProfile`.
+      - Dentro de `Await` renderizar la lista de usuarios con el componente `UserProfile` y actualizarlo para mostrar los nuevos campos`birthday` y `role`.
 8. En `main.tsx`:
       - Usar `createBrowserRouter` de `react-router-dom` para crear el router.
       - Importar y envolver la aplicación con `RouterProvider`.
@@ -118,8 +119,8 @@ Ahora solo queda ejecutar el proyecto con `npm run dev` y probar la navegación 
 
 Consiste en realizar lo siguiente:
 
-- Crear una nueva ruta de la forma “users/view/{id}”, donde {id} es un parámetro obligatorio en la ruta. Este se usará para encontrar el usuario con el index en el Array.
-- En caso de que no exista tal usuario con ese index se deberá mostrar un texto sencillo indicado que el usuario no existe. Se debe agregar un componente `<a>` con el texto “Ver perfil” en cada card del usuario. El index del usuario debe ser un nuevo prop de tipo numérico y opcional, debido a que solo se enviara desde la vista de lista.
-- Tomar en cuenta el uso del prop “Loader”, la sintaxis para definir parámetros en React-router y crear una nueva función “loadUserByIndex” para devolver el usuario.
+- Crear una nueva ruta de la forma “users/view/{id}”, donde {id} es un parámetro obligatorio en la ruta. Este se usará para encontrar el usuario con el id en el Array.
+- En caso de que no exista tal usuario con ese id se deberá mostrar un texto sencillo indicado que el usuario no existe. Se debe agregar un componente `<a>` con el texto “Ver perfil” en cada card del usuario. El id del usuario debe ser un nuevo prop de tipo string y opcional, debido a que solo se enviara desde la vista de lista.
+- Tomar en cuenta el uso del prop “Loader”, la sintaxis para definir parámetros en React-router y crear una nueva función “loadUserById” para devolver el usuario.
 
 > Hint: Crear otro archivo view.tsx dentro de la carpeta `users` que use el hook `userLoaderData` y que haga uso del componente `UserProfile` para enviar la data.
