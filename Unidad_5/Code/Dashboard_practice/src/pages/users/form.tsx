@@ -1,7 +1,8 @@
 import React from 'react';
+import moment from 'moment';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
-import { UserByIndexLoaderDataType, UserCreateType } from '@customTypes/user';
+import { UserByIdLoaderDataType, UserCreateType } from '@customTypes/user';
 
 import DataRepo from '@api/datasource';
 
@@ -12,40 +13,41 @@ import { isLoadingMutation, isLoadingOrRefetchQuery } from '@utils/query';
 import Input from '@components/form/Input';
 import SwitchInput from '@components/form/Check';
 import Verified from '@components/form/Verified';
-import NumberInput from '@components/form/Number';
+import DateInput from '@components/form/Date';
+import SelectInput from '@components/form/Select';
 
 type Params = {
-  index: string;
+  id: string;
 };
 
 const INITIAL_STATE: UserCreateType = {
   name: '',
-  age: 25,
-  city: '',
+  birthday: moment().unix(),
+  role: 'user',
   verified: false,
 };
 
 const UserForm = () => {
-  const { index } = useParams<Params>();
+  const { id } = useParams<Params>();
 
   const navigate = useNavigate();
 
   const inputRef = React.useRef<HTMLInputElement>(null);
 
-  const [mode] = React.useState(index ? 'edit' : 'create');
+  const [mode] = React.useState(id ? 'edit' : 'create');
 
   const [state, setState] = React.useState<UserCreateType>(INITIAL_STATE);
 
   const userQuery = useQuery<
-    UserByIndexLoaderDataType,
+    UserByIdLoaderDataType,
     Error,
-    UserByIndexLoaderDataType,
-    [string, number]
+    UserByIdLoaderDataType,
+    [string, string | undefined]
   >({
-    enabled: Boolean(index && Number(index) >= 0),
-    queryKey: [QKeys.GET_USER, Number(index)],
+    enabled: Boolean(id),
+    queryKey: [QKeys.GET_USER, id],
     queryFn: async ({ queryKey }) => {
-      return await DataRepo.loadUserByIndex(Number(queryKey[1]));
+      return await DataRepo.loadUserById(queryKey[1]!);
     },
   });
 
@@ -67,7 +69,7 @@ const UserForm = () => {
 
   const userUpdateMutation = useMutation<void, Error, UserCreateType>({
     mutationFn: async (user) => {
-      return await DataRepo.updateUser(Number(index), user);
+      return await DataRepo.updateUser(id!, user);
     },
     onSettled: (_, error) => {
       if (error) {
@@ -82,7 +84,7 @@ const UserForm = () => {
   });
 
   React.useEffect(() => {
-    if (mode === 'create' || !userQuery.data) {
+    if (mode === 'create' || !userQuery.data?.user) {
       return;
     }
 
@@ -150,7 +152,7 @@ const UserForm = () => {
           onSubmit={(e) => {
             e.preventDefault();
 
-            if (mode === 'edit' && index) {
+            if (mode === 'edit' && id) {
               userUpdateMutation.mutate(state);
             } else {
               userCreateMutation.mutate(state);
@@ -163,17 +165,17 @@ const UserForm = () => {
             onChange={handleChange.bind(null, 'name')}
           />
 
-          <NumberInput
-            label="Age"
-            value={state.age}
-            onChange={handleChange.bind(null, 'age')}
+          <DateInput
+            label="Birthday"
+            value={state.birthday}
+            onChange={handleChange.bind(null, 'birthday')}
           />
 
-          <Input
-            ref={inputRef}
-            label="City"
-            value={state.city}
-            onChange={handleChange.bind(null, 'city')}
+          <SelectInput
+            label="Role"
+            value={state.role}
+            options={['admin', 'user']}
+            onChange={handleChange.bind(null, 'role')}
           />
 
           <SwitchInput

@@ -52,7 +52,7 @@ function Users() {
           </div>
           <div className="cd-flex cd-flex-row cd-justify-center cd-gap-x-[2rem] cd-mt-[2rem]">
             {data.users.map((user, index) => (
-              <UserProfile key={user.name} {...user} index={index} />
+              <UserProfile key={user.id} data={user} index={index} />
             ))}
           </div>
         </div>

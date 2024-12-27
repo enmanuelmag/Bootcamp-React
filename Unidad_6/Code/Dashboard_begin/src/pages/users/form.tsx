@@ -1,10 +1,11 @@
 import React from 'react';
+import moment from 'moment';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
-  UserByIndexLoaderDataType,
+  UserByIdLoaderDataType,
   UserCreateSchema,
   UserCreateType,
 } from '@customTypes/user';
@@ -16,29 +17,30 @@ import { QKeys } from '@constants/query';
 import { isLoadingMutation, isLoadingOrRefetchQuery } from '@utils/query';
 
 import Input from '@components/form/Input';
+import DateInput from '@components/form/Date';
 import SwitchInput from '@components/form/Check';
 import Verified from '@components/form/Verified';
-import NumberInput from '@components/form/Number';
+import SelectInput from '@components/form/Select';
 
 type Params = {
-  index: string;
+  id: string;
 };
 
 const INITIAL_STATE: UserCreateType = {
   name: '',
-  age: 25,
-  city: '',
+  birthday: moment().unix(),
+  role: 'user',
   verified: false,
 };
 
 const UserForm = () => {
-  const { index } = useParams<Params>();
+  const { id } = useParams<Params>();
 
   const navigate = useNavigate();
 
   const inputRef = React.useRef<HTMLInputElement>(null);
 
-  const [mode] = React.useState(index ? 'edit' : 'create');
+  const [mode] = React.useState(id ? 'edit' : 'create');
 
   const [watchVerified, setWatchVerified] = React.useState(false);
 
@@ -48,15 +50,15 @@ const UserForm = () => {
   });
 
   const userQuery = useQuery<
-    UserByIndexLoaderDataType,
+    UserByIdLoaderDataType,
     Error,
-    UserByIndexLoaderDataType,
-    [string, number]
+    UserByIdLoaderDataType,
+    [string, string | undefined]
   >({
-    enabled: Boolean(index && Number(index) >= 0),
-    queryKey: [QKeys.GET_USER, Number(index)],
+    enabled: Boolean(id),
+    queryKey: [QKeys.GET_USER, id],
     queryFn: async ({ queryKey }) => {
-      return await DataRepo.loadUserByIndex(Number(queryKey[1]));
+      return await DataRepo.loadUserById(queryKey[1]!);
     },
   });
 
@@ -78,7 +80,7 @@ const UserForm = () => {
 
   const userUpdateMutation = useMutation<void, Error, UserCreateType>({
     mutationFn: async (user) => {
-      return await DataRepo.updateUser(Number(index), user);
+      return await DataRepo.updateUser(id!, user);
     },
     onSettled: (_, error) => {
       if (error) {
@@ -93,7 +95,7 @@ const UserForm = () => {
   });
 
   React.useEffect(() => {
-    if (mode === 'create' || !userQuery.data) {
+    if (mode === 'create' || !userQuery.data?.user) {
       return;
     }
 
@@ -170,10 +172,10 @@ const UserForm = () => {
         <form
           className="cd-flex cd-flex-col cd-gap-4"
           onSubmit={formUser.handleSubmit((data) => {
-            if (mode === 'create') {
-              userCreateMutation.mutate(data);
-            } else {
+            if (mode === 'edit' && id) {
               userUpdateMutation.mutate(data);
+            } else {
+              userCreateMutation.mutate(data);
             }
           })}
         >
@@ -191,27 +193,26 @@ const UserForm = () => {
           />
 
           <Controller
-            name="age"
+            name="birthday"
             control={formUser.control}
             render={({ field }) => (
-              <NumberInput
-                label="Age"
+              <DateInput
+                label="Birthday"
                 value={field.value}
                 onChange={field.onChange}
-                error={formUser.formState.errors.age?.message}
               />
             )}
           />
 
           <Controller
-            name="city"
+            name="role"
             control={formUser.control}
             render={({ field }) => (
-              <Input
-                label="City"
+              <SelectInput
+                label="Role"
                 value={field.value}
+                options={['admin', 'user']}
                 onChange={field.onChange}
-                error={formUser.formState.errors.city?.message}
               />
             )}
           />

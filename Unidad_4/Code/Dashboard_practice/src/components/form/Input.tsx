@@ -23,7 +23,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>((props, ref) => {
         onChange={(e) => onChange(e.target.value)}
         className="cd-mt-1 cd-block cd-w-full cd-px-3 cd-py-2 cd-border cd-border-gray-300 cd-rounded-md cd-shadow-sm focus:cd-outline-none focus:cd-ring-indigo-500 focus:cd-border-indigo-500 sm:cd-text-sm"
       />
-      {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
+      {error && <p className="cd-mt-2 cd-text-sm cd-text-red-600">{error}</p>}
     </div>
   );
 });

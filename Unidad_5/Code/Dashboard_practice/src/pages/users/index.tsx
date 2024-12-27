@@ -61,7 +61,7 @@ function Users() {
             onChange={goToPage}
             totalPages={totalPages}
             renderItem={(user, index) => (
-              <UserProfile key={`user-${index}`} {...user} />
+              <UserProfile key={user.id} data={user} index={index} />
             )}
           />
         </div>

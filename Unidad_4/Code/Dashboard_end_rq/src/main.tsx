@@ -34,11 +34,11 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: 'users/view/:index',
+        path: 'users/view/:id',
         element: <UserView />,
       },
       {
-        path: 'users/form/:index?',
+        path: 'users/form/:id?',
         element: <UserForm />,
       },
       {

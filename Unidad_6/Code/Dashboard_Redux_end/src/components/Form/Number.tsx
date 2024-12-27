@@ -21,7 +21,7 @@ const NumberInput = (props: NumberInputProps) => {
           }
         }}
       />
-      {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
+      {error && <p className="cd-mt-2 cd-text-sm cd-text-red-600">{error}</p>}
     </div>
   );
 };

@@ -2,17 +2,15 @@ import { z } from 'zod';
 
 //Entities
 export const UserSchema = z.object({
+  id: z.string(),
   name: z
     .string()
     .min(3, 'Name must be at least 3 characters long')
     .max(255, 'Name must be at most 255 characters long'),
   url: z.string(),
-  age: z.number().positive().int(),
-  city: z
-    .string()
-    .min(3, 'City must be at least 3 characters long')
-    .max(255, 'City must be at most 255 characters long'),
   verified: z.boolean().optional(),
+  role: z.enum(['admin', 'user']),
+  birthday: z.number(),
 });
 
 export type UserType = z.infer<typeof UserSchema>;
@@ -24,15 +22,13 @@ export const UserLoaderDataSchema = z.object({
 
 export type UserLoaderDataType = z.infer<typeof UserLoaderDataSchema>;
 
-export const UserByIndexLoaderDataSchema = z.object({
-  user: UserSchema,
+export const UserByIdLoaderDataSchema = z.object({
+  user: UserSchema.optional(),
 });
 
-export type UserByIndexLoaderDataType = z.infer<
-  typeof UserByIndexLoaderDataSchema
->;
+export type UserByIdLoaderDataType = z.infer<typeof UserByIdLoaderDataSchema>;
 
 //Form
-export const UserCreateSchema = UserSchema.omit({ url: true });
+export const UserCreateSchema = UserSchema.omit({ id: true, url: true });
 
 export type UserCreateType = z.infer<typeof UserCreateSchema>;

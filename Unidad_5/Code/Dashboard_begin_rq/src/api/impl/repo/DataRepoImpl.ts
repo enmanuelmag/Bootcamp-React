@@ -1,6 +1,6 @@
 import DataDS from '@api/domain/ds/DataDS';
 import {
-  UserByIndexLoaderDataType,
+  UserByIdLoaderDataType,
   UserCreateType,
   UserLoaderDataType,
 } from '@customTypes/user';
@@ -16,20 +16,20 @@ class DataRepoImpl {
     return this.data.loadUsers(state);
   }
 
-  async loadUserByIndex(index: number): Promise<UserByIndexLoaderDataType> {
-    return this.data.loadUserByIndex(index);
+  async loadUserById(id: string): Promise<UserByIdLoaderDataType> {
+    return this.data.loadUserById(id);
   }
 
   async saveUser(user: UserCreateType): Promise<void> {
     return this.data.saveUser(user);
   }
 
-  async updateUser(index: number, user: UserCreateType): Promise<void> {
-    return this.data.updateUser(index, user);
+  async updateUser(id: string, user: UserCreateType): Promise<void> {
+    return this.data.updateUser(id, user);
   }
 
-  async deleteUser(index: number): Promise<void> {
-    return this.data.deleteUser(index);
+  async deleteUser(id: string): Promise<void> {
+    return this.data.deleteUser(id);
   }
 }
 

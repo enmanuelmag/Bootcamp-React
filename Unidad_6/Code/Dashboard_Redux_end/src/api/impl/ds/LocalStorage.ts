@@ -3,7 +3,7 @@ import { User, UserCreate } from '@customTypes/user';
 
 const USERS_KEY = 'users';
 
-const sleep = (ms = 1500) => new Promise((resolve) => setTimeout(resolve, ms));
+const sleep = (ms = 500) => new Promise((resolve) => setTimeout(resolve, ms));
 
 class LocalStorageDS implements DataDS {
   async loadUsers(state?: string) {
