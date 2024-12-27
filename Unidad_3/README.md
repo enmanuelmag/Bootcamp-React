@@ -58,14 +58,17 @@ Pasos a seguir:
 3. Agregar un botón en `index.tsx` sencillo con el texto `Ver usuarios` que nos redirija a la ruta `/users`.
 4. Crear el archivo `Layout.tsx` dentro de `components`. En el renderizaremos el componente `Outlet` de `react-router-dom`.
 5. Crear la carpeta `types` en `src/` y dentro de ella el archivo `user.ts`. El type de `user` debe contener:
+     - id: string (uuid)
      - name: string
      - url: string
      - verified: boolean?
+     - birthday: number (usar la librería moment para el manejo de fechas desde un number "unix" a un string)
 6. Crear la carpeta `api` en `src/` y dentro de ella el archivo `users.ts`. En este archivo crearemos una función que nos devuelva una lista de usuarios.
      - Los usuarios deben estar en un Array (definir mínimo 3) 
      - Crear una función `sleep` que nos permita simular una carga de datos.
      - Crear la función `loadUsers` que nos devuelva una promesa con los usuarios. Usar `sleep` para simular la carga y `defer` para resolver la promesa.
      - Definir el tipo `UserLoaderData` de retorno de la función.
+     - Usar momentjs y uuid para mejor manejo de datos.
 7. Crear la carpeta `users` dentro de `pages` y dentro de ella el archivo `index.tsx`. En este archivo:
       - Importar el tipo `UserLoaderData` de `api/users.ts`.
       - Importar el hook `useLoaderData` de `react-router-dom` y guardarlo en una constante `data`.

@@ -37,6 +37,7 @@ Para esta práctica crearemos un nuevo endpoint `users/form/:id?` que nos permit
 - Age, un input de número.
 - City, un input de texto.
 - Verified, un checkbox.
+- Birthday, un input de fecha.
 
 Se deben cumplir los siguientes requerimientos al usar los hooks:
 - useState, para administrar el type “Form” que tendrá los datos del formulario.
@@ -53,6 +54,7 @@ npm install zod
       - Input
       - Number
       - Verified
+      - Date
 3. Crear la nueva vista/componente `form.tsx` en la carpeta `src/pages/users` que contenga el formulario y cumpla con los requerimientos. Dejar la lógica del guardado para el final.
 
 Es importante todo este background de ReactJS porque esta librería al no ser un framework es muy fácil perderse en malas prácticas de código, estructura de proyecto y de más que después provocarán que sea muy difícil de mantener y adoptar para nuestros programadores. Se debe siempre estar al tanto de los patrones y buenas prácticas para aplicarlas de la mejor manera en todo proyecto.
