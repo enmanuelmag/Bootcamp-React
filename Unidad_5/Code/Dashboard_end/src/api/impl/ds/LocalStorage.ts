@@ -1,9 +1,11 @@
+import { v4 as uuid } from 'uuid';
+
 import DataDS from '@api/domain/ds/DataDS';
 import { UserCreateType, UserType } from '@customTypes/user';
 
 const USER_KEY = 'users';
 
-const sleep = (ms = 1500) => new Promise((resolve) => setTimeout(resolve, ms));
+const sleep = (ms = 500) => new Promise((resolve) => setTimeout(resolve, ms));
 
 class LocalStorageDS extends DataDS {
   getUsers() {
@@ -38,13 +40,13 @@ class LocalStorageDS extends DataDS {
     }
   }
 
-  async loadUserByIndex(index: number) {
+  async loadUserById(id: string) {
     try {
       await sleep();
 
       const users = this.getUsers();
 
-      const user = users[index];
+      const user = users.find((user) => user.id === id);
 
       return {
         user,
@@ -63,8 +65,9 @@ class LocalStorageDS extends DataDS {
 
       const newUsers: UserType[] = users;
 
-      newUsers.push({
+      newUsers.unshift({
         ...user,
+        id: uuid(),
         url: `https://avatar.iran.liara.run/public/boy?username=${user.name}`,
       });
 
@@ -75,35 +78,39 @@ class LocalStorageDS extends DataDS {
     }
   }
 
-  async updateUser(index: number, user: UserCreateType) {
+  async updateUser(id: string, user: UserCreateType) {
     try {
       await sleep();
 
       const users = this.getUsers();
 
-      const newUsers: UserType[] = users;
+      const userIndex = users.findIndex((user) => user.id === id);
 
-      const userToUpdate = newUsers[index];
+      if (userIndex === -1) {
+        throw new Error('Usuario no encontrado');
+      }
 
-      newUsers[index] = {
-        ...userToUpdate,
+      const userToUpdate = {
+        ...users[userIndex],
         ...user,
       };
 
-      localStorage.setItem(USER_KEY, JSON.stringify(newUsers));
+      users[userIndex] = userToUpdate;
+
+      localStorage.setItem(USER_KEY, JSON.stringify(users));
     } catch (error) {
       console.error(error);
       throw new Error('Error al actualizar el usuario');
     }
   }
 
-  async deleteUser(index: number) {
+  async deleteUser(id: string) {
     try {
       await sleep();
 
       const users = this.getUsers();
 
-      const newUsers = users.filter((_, i) => i !== index);
+      const newUsers = users.filter((user) => user.id !== id);
 
       localStorage.setItem(USER_KEY, JSON.stringify(newUsers));
     } catch (error) {

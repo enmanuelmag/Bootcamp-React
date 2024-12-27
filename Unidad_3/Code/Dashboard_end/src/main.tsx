@@ -2,7 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import { loadUserByIndex, loadUsers } from '@api/user';
+import { loadUserById, loadUsers } from '@api/user';
 
 import Users from '@pages/users';
 import UserView from '@pages/users/view';
@@ -25,9 +25,9 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: 'users/view/:index',
+        path: 'users/view/:id',
         loader: ({ params }) => {
-          return loadUserByIndex(Number(params.index));
+          return loadUserById(params.id!);
         },
         element: <UserView />,
       },

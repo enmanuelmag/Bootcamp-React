@@ -1,12 +1,12 @@
 import React from 'react';
 import { Await, useLoaderData } from 'react-router-dom';
 
-import { UserByIndexLoaderDataType } from '@customTypes/user';
+import { UserByIdLoaderDataType } from '@customTypes/user';
 
 import UserProfile from '@components/UserProfile';
 
 const UserView = () => {
-  const data = useLoaderData() as UserByIndexLoaderDataType;
+  const data = useLoaderData() as UserByIdLoaderDataType;
 
   return (
     <React.Suspense
@@ -15,7 +15,9 @@ const UserView = () => {
       }
     >
       <Await resolve={data.user}>
-        {(user) => <UserProfile key={`profile-${user.name}`} {...user} />}
+        {(user) =>
+          user && <UserProfile key={`profile-${user.id}`} data={user} />
+        }
       </Await>
     </React.Suspense>
   );

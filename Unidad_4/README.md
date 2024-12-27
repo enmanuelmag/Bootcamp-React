@@ -107,6 +107,8 @@ abstract class DataDS {
   abstract loadUserById(id: string): Promise<UserByIdLoaderData>;
 
   abstract saveUser(user: UserCreate): Promise<void>;
+
+  abstract updateUser(id: string, user: UserCreateType): Promise<void>;
 }
 
 export default DataDS;
@@ -115,7 +117,7 @@ export default DataDS;
 ```typescript
 const USERS_KEY = 'users';
 
-const sleep = (ms = 1500) => new Promise((resolve) => setTimeout(resolve, ms));
+const sleep = (ms = 500) => new Promise((resolve) => setTimeout(resolve, ms));
 
 class LocalStorageDS implements DataDS {
   async loadUsers(state?: string) {
@@ -243,7 +245,7 @@ Este diseño nos permite tener una separación de responsabilidades y una fácil
 
 ## Extra (Tarea)
 
-Crear un botón en el componente “UserProfile” que se llame “Eliminar” de color rojo. Este deberá invocar una nueva función en nuestro DataSource “deleteUser” que recibe el index del usuario y lo elimina de la base de datos.
+Crear un botón en el componente “UserProfile” que se llame “Eliminar” de color rojo. Este deberá invocar una nueva función en nuestro DataSource “deleteUser” que recibe el id del usuario y lo elimina de la base de datos.
 
 
 ## Extra (React Query)

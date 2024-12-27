@@ -25,16 +25,16 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: 'users/view/:index',
+        path: 'users/view/:id',
         loader: ({ params }) => {
-          return DataRepo.loadUserByIndex(Number(params.index));
+          return DataRepo.loadUserById(params.id!);
         },
         element: <UserView />,
       },
       {
-        path: 'users/form/:index?',
+        path: 'users/form/:id?',
         loader: ({ params }) => {
-          return DataRepo.loadUserByIndex(Number(params.index));
+          return DataRepo.loadUserById(params.id!);
         },
         element: <UserForm />,
       },

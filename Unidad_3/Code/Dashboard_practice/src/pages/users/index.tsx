@@ -20,7 +20,7 @@ function Users() {
         {(users: UserLoaderDataType['users']) => (
           <section className="cd-flex cd-flex-row cd-flex-wrap cd-justify-center">
             {users.map((user) => (
-              <UserProfile key={user.name} {...user} />
+              <UserProfile key={user.id} data={user} />
             ))}
           </section>
         )}

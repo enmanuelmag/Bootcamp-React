@@ -1,15 +1,17 @@
 import {
   UserCreateType,
   UserLoaderDataType,
-  UserByIndexLoaderDataType,
+  UserByIdLoaderDataType,
 } from '@customTypes/user';
 
 abstract class DataDS {
   abstract loadUsers(state?: string): Promise<UserLoaderDataType>;
 
-  abstract loadUserByIndex(index: number): Promise<UserByIndexLoaderDataType>;
+  abstract loadUserById(id: string): Promise<UserByIdLoaderDataType>;
 
   abstract saveUser(user: UserCreateType): Promise<void>;
+
+  abstract updateUser(id: string, user: UserCreateType): Promise<void>;
 }
 
 export default DataDS;

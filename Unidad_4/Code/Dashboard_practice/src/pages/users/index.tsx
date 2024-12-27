@@ -22,7 +22,7 @@ function Users() {
             {Boolean(users.length) && (
               <section className="cd-w-full cd-flex cd-flex-row cd-flex-wrap cd-justify-center">
                 {users.map((user, index) => (
-                  <UserProfile key={user.name} index={index} {...user} />
+                  <UserProfile key={user.id} data={user} index={index} />
                 ))}
               </section>
             )}

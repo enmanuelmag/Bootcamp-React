@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import DataRepo from '@api/datasource';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -7,7 +8,8 @@ import { UserCreateType } from '@customTypes/user';
 import Input from '@components/form/Input';
 import SwitchInput from '@components/form/Check';
 import Verified from '@components/form/Verified';
-import NumberInput from '@components/form/Number';
+import DateInput from '@components/form/Date';
+import SelectInput from '@components/form/Select';
 
 type Params = {
   index: string;
@@ -15,8 +17,8 @@ type Params = {
 
 const INITIAL_STATE: UserCreateType = {
   name: '',
-  age: 25,
-  city: '',
+  birthday: moment().unix(),
+  role: 'user',
   verified: false,
 };
 
@@ -24,8 +26,6 @@ const UserForm = () => {
   const { index } = useParams<Params>();
 
   const navigate = useNavigate();
-
-  const inputRef = React.useRef<HTMLInputElement>(null);
 
   const [mode] = React.useState(index ? 'edit' : 'create');
 
@@ -82,17 +82,17 @@ const UserForm = () => {
           onChange={handleChange.bind(null, 'name')}
         />
 
-        <NumberInput
-          label="Age"
-          value={state.age}
-          onChange={handleChange.bind(null, 'age')}
+        <DateInput
+          label="Birthday"
+          value={state.birthday}
+          onChange={handleChange.bind(null, 'birthday')}
         />
 
-        <Input
-          ref={inputRef}
-          label="City"
-          value={state.city}
-          onChange={handleChange.bind(null, 'city')}
+        <SelectInput
+          label="Role"
+          value={state.role}
+          options={['admin', 'user']}
+          onChange={handleChange.bind(null, 'role')}
         />
 
         <SwitchInput
