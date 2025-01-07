@@ -11,5 +11,5 @@ export type UserActionsType = {
 
 export const initialUserState: UserLoginType = {
   name: '',
-  role: 'user',
+  role: 'admin',
 };
