@@ -21,7 +21,7 @@ Es una librería de ReactJS que permite manejar el enrutamiento de una aplicaci�
 ## Instalación de React Router
 
 ```bash
-npm install react-router-dom
+npm install react-router-dom zod
 ```
 
 ## Configurando rutas
